@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Feedback Analysis Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        textarea {
+            width: 80%;
+            height: 150px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: none;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e7f3fe;
+            border: 1px solid #b3d7ff;
+            border-radius: 8px;
+            display: inline-block;
+            width: 80%;
+            text-align: left;
+        }
+        .positive { color: green; }
+        .negative { color: red; }
+        .neutral { color: orange; }
+    </style>
+</head>
+<body>
+<h1>AI-Driven Customer Feedback Analysis</h1>
+<p>Enter customer feedback from social media, reviews, or surveys:</p>
+
+<textarea id="feedbackInput" placeholder="Paste customer feedback here..."></textarea><br>
+<button onclick="analyzeFeedback()">Analyze Feedback</button>
+
+<div id="output"></div>
+
+<script>
+    const positiveWords = ['great', 'amazing', 'happy', 'excellent', 'love', 'good', 'satisfied', 'fast', 'recommend'];
+    const negativeWords = ['bad', 'terrible', 'slow', 'hate', 'worst', 'angry', 'broken', 'unsatisfied', 'poor'];
+    
+    function analyzeFeedback() {
+        const feedback = document.getElementById('feedbackInput').value;
+        const output = document.getElementById('output');
+        
+        if (feedback.trim() === '') {
+            alert("Please enter feedback!");
+            return;
+        }
+    
+        let positiveCount = 0, negativeCount = 0;
+        let words = feedback.toLowerCase().split(/\W+/);
+    
+        words.forEach(word => {
+            if (positiveWords.includes(word)) positiveCount++;
+            if (negativeWords.includes(word)) negativeCount++;
+        });
+    
+        let sentiment = '';
+        let percentage = Math.round((positiveCount / (positiveCount + negativeCount + 1)) * 100);
+        
+        if (positiveCount > negativeCount) {
+            sentiment = `<span class="positive">Positive</span> 🔥 (${percentage}%)`;
+        } else if (negativeCount > positiveCount) {
+            sentiment = `<span class="negative">Negative</span> ⚠️ (${100 - percentage}%)`;
+        } else {
+            sentiment = `<span class="neutral">Neutral</span> 🤔`;
+        }
+    
+        output.innerHTML = `
+            <h3>Feedback Analysis Result:</h3>
+            <p>Sentiment: ${sentiment}</p>
+            <p>Positive Keywords: ${positiveCount}</p>
+            <p>Negative Keywords: ${negativeCount}</p>
+        `;
+    }
+    
+</script>
+
+</body>
+</html>
